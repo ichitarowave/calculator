@@ -1,62 +1,86 @@
 import 'package:flutter/material.dart';
-
-void main() => runApp(new MyApp());
-
+import 'buildbutton.dart';
+void main() => runApp(const MyApp());
+///　↓　class
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return  MaterialApp(
       title: 'Flutter Demo',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
+      theme:  ThemeData(
+        primarySwatch: Colors.yellow,
       ),
-      home: new MyHomePage(title: 'Calculator'),
+      home:  const MyHomePage(title: 'Calculator'),
     );
   }
 }
-
+/// ↑ class
+///class
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
   final String title;
-
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _MyHomePageState createState() =>  _MyHomePageState();
 }
 
+///widgetからclassに
+class BuildButton extends StatelessWidget {
+  const BuildButton({
+    required this.onPressed,
+    required Key key,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build (String buttonText) {
+    return Expanded(
+      child: OutlinedButton(
+
+          child: Text(buttonText,
+            style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+          onPressed: onPressed, =>
+          onPressed(buttonText),
+    ),
+    );
+  }
+}
+///ここまで
+
+
+
+
+
+///class
 class _MyHomePageState extends State<MyHomePage> {
-
   String output = "0";
-
   String _output = "0";
   double num1 = 0.0;
   double num2 = 0.0;
   String operand = "";
-
+/// ボタンを押したらどんな反応をさせるかの設計
   buttonPressed(String buttonText){
-
+///　　もしクリアボタン押したら画面には0を出力
     if(buttonText == "CLEAR"){
-
       _output = "0";
       num1 = 0.0;
       num2 = 0.0;
       operand = "";
-
+///　　　そうじゃなくてもし、＋、ー、/、X,ボタンを押したらnum1にdouble.parseを代入する。画面上は０のまま。
     } else if (buttonText == "+" || buttonText == "-" || buttonText == "/" || buttonText == "X"){
-
       num1 = double.parse(output);
-
       operand = buttonText;
-
       _output = "0";
-
+      ///クリアじゃなく演算子でもなく　.ボタンでさらに.ボタン押されたらすでに含まれていると出力
     } else if(buttonText == "."){
-
       if(_output.contains(".")){
         print("Already conatains a decimals");
         return;
-
       } else {
         _output = _output + buttonText;
       }
@@ -83,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
       operand = "";
 
     } else {
-
+///ここで数字ボタンと画面表示の連結
       _output = _output + buttonText;
 
     }
@@ -98,78 +122,62 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 
-  Widget buildButton(String buttonText) {
-    return new Expanded(
-      child: new OutlineButton(
-        padding: new EdgeInsets.all(24.0),
-        child: new Text(buttonText,
-          style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold
-          ),
-        ),
-        onPressed: () =>
-            buttonPressed(buttonText)
-        ,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text(widget.title),
+    return  Scaffold(
+        appBar:  AppBar(
+          title: Text(widget.title),
         ),
-        body: new Container(
-            child: new Column(
+        body:  Container(
+            child:  Column(
               children: <Widget>[
-                new Container(
+                 Container(
                     alignment: Alignment.centerRight,
-                    padding: new EdgeInsets.symmetric(
-                        vertical: 24.0,
+                    padding:  const EdgeInsets.symmetric(
+                        vertical: 36.0,
                         horizontal: 12.0
                     ),
-                    child: new Text(output, style: new TextStyle(
+                    child:  Text(output, style:  const TextStyle(
                       fontSize: 48.0,
                       fontWeight: FontWeight.bold,
 
                     ))),
-                new Expanded(
-                  child: new Divider(),
+                 const Expanded(
+                  child:  Divider(),
                 ),
 
 
-                new Column(children: [
-                  new Row(children: [
+                 Column(children: [
+                   Row(children: [
                     buildButton("7"),
                     buildButton("8"),
                     buildButton("9"),
                     buildButton("/")
                   ]),
 
-                  new Row(children: [
+                   Row(children: [
                     buildButton("4"),
                     buildButton("5"),
                     buildButton("6"),
                     buildButton("X")
                   ]),
 
-                  new Row(children: [
+                   Row(children: [
                     buildButton("1"),
                     buildButton("2"),
                     buildButton("3"),
                     buildButton("-")
                   ]),
 
-                  new Row(children: [
+                   Row(children: [
                     buildButton("."),
                     buildButton("0"),
                     buildButton("00"),
                     buildButton("+")
                   ]),
 
-                  new Row(children: [
+                   Row(children: [
                     buildButton("CLEAR"),
                     buildButton("="),
                   ])
